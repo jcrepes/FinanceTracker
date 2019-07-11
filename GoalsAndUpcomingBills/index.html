@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <link rel="stylesheet" href="style.css">
+        <title>iSpend(?)</title>
+    </head>
+    <div id="app">
+        <v-app>
+            <v-content>
+                <v-toolbar flat color="deep-purple lighten-3">
+                    <v-toolbar-title @click="page = 'home'">
+                        <v-icon left>menu</v-icon>
+                        iSpend
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn flat @click="page = 'sign_in'">Sign In</v-btn>
+                        <v-btn flat @click="page = 'sign_up'">Sign Up</v-btn>
+                        <v-btn flat @click="page='home'">Home</v-btn>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <!-- Start of pages -->
+                <v-container fluid>
+                    <v-layout v-if="page == 'sign_up'" mt-3>
+                        <v-flex xs2 text-xs-center></v-flex>
+                        <v-flex xs8>
+                            <v-flex xs12 sm6 md3>
+                                <v-text-field
+                                    label="Name"
+                                    placeholder="John Doe"
+                                ></v-text-field>
+                            </v-flex>
+    
+                            <v-flex xs12 sm6 md3>
+                                <v-text-field
+                                    label="Email"
+                                    placeholder="blah@blah.com"
+                                ></v-text-field>
+                            </v-flex>
+
+                            <v-flex xs12 sm6 md3>
+                                <v-text-field
+                                    label="Password"
+                                    placeholder="***********"
+                                ></v-text-field>
+                            </v-flex>
+
+                            <v-checkbox
+                                label="Accept Terms and Conditions">
+                            </v-checkbox>
+
+                            <v-btn>Submit</v-btn>
+                        </v-flex>
+                        <v-flex xs2 text-xs-center></v-flex>
+                    </v-layout>
+                    
+                    
+                    <v-container fluid v-if="page == 'home'">
+                    <v-layout>
+                        <v-card width="500" class="mx-auto" color="deep-purple lighten-4">
+                            <v-toolbar dark color="deep-purple lighten-2 font-weight-bold">
+                                <v-toolbar-title>
+                                    Goals
+                                </v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-toolbar-items>
+                                    <v-btn flat>
+                                        <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
+                                            <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                                        </svg>
+                                    </v-btn>
+                                </v-toolbar-items>
+                            </v-toolbar>
+                            <v-card-text flat>
+                                    <v-list>
+                                        <v-list-tile v-for="item in goals">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title class="headline title">
+                                                    <v-btn flat class="editButton"><v-icon>edit</v-icon>
+                                                    </v-btn>
+                                                    {{item.goal}}</v-list-tile-title>
+                                                </v-list-tile-content>
+                                                <v-list-tile-action>
+                                                    <v-checkbox
+                                                      v-model="ex4"
+                                                      label="completed"
+                                                      color="success"
+                                                      value="completed"
+                                                      hide-details
+                                                    ></v-checkbox>
+                                                </v-list-tile-action>
+                                        </v-list-tile> 
+                                    </v-list>
+                            </v-card-text> 
+                        </v-card>
+                        <v-card width="500" class="mx-auto" color="deep-purple lighten-4">
+                            <v-toolbar dark color="deep-purple lighten-2 font-weight-bold">
+                                <v-toolbar-title>
+                                    Upcoming Payments
+                                </v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-toolbar-items>
+                                    <v-btn flat>
+                                        <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
+                                            <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                                        </svg>
+                                    </v-btn>
+                                </v-toolbar-items>
+                            </v-toolbar>
+                            <v-card-text flat>
+                                    <v-list two-line>
+                                        <v-list-tile v-for="bill in bills">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title class="headline title">
+                                                    <v-btn flat class="editButton">
+                                                    <v-icon class="editIcon">edit</v-icon>
+                                                    </v-btn> {{bill.billName}}</v-list-tile-title>  
+                                                </v-list-tile-content>
+                                                <v-list-tile-action>
+                                                    <v-checkbox
+                                                      label="paid"
+                                                      color="success"
+                                                      value="paid"
+                                                      hide-details
+                                                    ></v-checkbox>
+                                                    <div>
+                                                        Due: {{bill.dueDate}} Amount: {{bill.amount}}
+                                                    </div>
+                                                </v-list-tile-action>
+                                        </v-list-tile> 
+                                    </v-list>
+                            </v-card-text>
+                        </v-card>
+                    </v-layout>
+                        
+                        <!--    New Goal Form -->
+                
+                        <v-layout>
+                                                    <div>
+    <v-card>
+                                        <v-card-title>
+                                          <span class="headline">Enter a New Goal</span>
+                                        </v-card-title>
+                                        <v-card-text>
+                                          <v-container grid-list-md>
+                                            <v-layout wrap>
+                                              <v-flex xs12>
+                                                <v-text-field label="Goal Name*" required></v-text-field>
+                                              </v-flex>
+                                              <v-flex xs12>
+                                                <v-text-area label="Description"></v-text-area>
+                                              </v-flex>
+                                              <v-flex xs12>
+                                                <v-checkbox
+                                                      label="Does this goal have a deadline?"
+                                                      color="deep-purple lighten-1"
+                                                      value="isdeadline"
+                                                      hide-details
+                                                      v-model="isDeadline"
+    
+                                                ></v-checkbox>
+                                              </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="isDeadline">
+                                                    <v-select
+                                                      :items="month"
+                                                      label="Month*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="isDeadline">
+                                                    <v-select
+                                                      :items="day"
+                                                      label="Day*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="isDeadline">
+                                                    <v-select
+                                                      :items="year"
+                                                      label="Year*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+<!--
+                                              <v-flex xs12 sm6>
+                                                <v-select
+                                                  :items="['0-17', '18-29', '30-54', '54+']"
+                                                  label="Age*"
+                                                  required
+                                                ></v-select>
+                                              </v-flex>
+-->
+                                            </v-layout>
+                                          </v-container>
+                                          <small>*indicates required field</small>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                          <v-spacer></v-spacer>
+                                          <v-btn color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
+                                          <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                                        </div>
+                            </v-layout>
+                    </v-container>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <script src="code.js"></script>
+    </html>

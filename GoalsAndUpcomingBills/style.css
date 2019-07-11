@@ -1,3 +1,6 @@
 .title {
     height: 3rem !important;
 }
+.editButton {
+    min-width: 0;
+}
