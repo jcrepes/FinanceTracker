@@ -88,7 +88,7 @@ var app = new Vue ({
 				}
 			});
         },
-		saveGoalName: function ( goal ) {
+		saveGoalEdit: function ( goal ) {
 			var req_body = {
 				name: goal.name
 			};
@@ -109,11 +109,52 @@ var app = new Vue ({
 				}
 			});
 		},
-		saveGoalCompleted: function ( goal ) {
+        getBills: function ( ) {
+			fetch( `${ url }/bills` ).then( function ( response ) {
+				response.json( ).then( function ( data ) {
+					app.bills = data.bills;
+				});
+			});
+		},
+        addNewBill: function ( ) {
 			var req_body = {
-				completed: !goal.completed
+				name: this.new_bill_input
 			};
-			fetch( `${ url }/goals/${ goal.id }`, {
+			fetch( `${ url }/bills`, {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json"
+				},
+				body: JSON.stringify( req_body )
+			}).then( function ( response ) {
+				if ( response.status == 400 ) {
+					response.json( ).then( function ( data ) {
+						alert( data.msg );
+					});
+				} else if ( response.status == 201 ) {
+					app.new_bill_input = "";
+					app.getBills( );
+				}
+			});
+        },
+        deleteBill: function ( bill ) {
+			fetch( `${ url }/bills/${ bill.id }`, {
+				method: "DELETE"
+			}).then( function ( response ) {
+				if ( response.status == 404 ) {
+					response.json( ).then( function ( data ) {
+						alert( data.msg );
+					});
+				} else if ( response.status == 204 ) {
+					app.getBills( );
+				}
+			});
+        },
+		saveBillEdit: function ( bill ) {
+			var req_body = {
+				name: bill.name
+			};
+			fetch( `${ url }/bills/${ bill.id }`, {
 				method: "PUT",
 				headers: {
 					"Content-type": "application/json"
@@ -125,8 +166,8 @@ var app = new Vue ({
 						alert( data.msg );
 					});
 				} else if ( response.status == 204 ) {
-					goal.editing = false;
-					app.getGoals( );
+					bill.editing = false;
+					app.getBills( );
 				}
 			});
 		},
