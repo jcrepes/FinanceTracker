@@ -13,12 +13,18 @@ var app = new Vue ({
                 isdeadline:false,
             },
             {
-                goal:'Graduate',
-                description:'',
+                goal:"Don't Graduate",
+                description:'so i hate school',
                 deadline:'',
                 isdeadline:false,
             },
         ],
+//        added data for new goal
+        addingNewGoal: false,
+        //        added data for editing goal
+        editingGoal:false,
+        //        added data for editing goal
+        goalsIndex: 0,
         bills: [
             {
                 billName:'rent',
@@ -47,6 +53,14 @@ var app = new Vue ({
         ],
     },
     methods: {
+//        created edit goal function
+        editGoal: function(goalName) {
+            for (var i = 0; i < this.goals.length; i++) {
+            } if (goalName==this.goals[i]) {
+                this.goalsIndex=i;
+            }
+            return goalName;
+        },
         getGoals: function ( ) {
 			fetch( `${ url }/goals` ).then( function ( response ) {
 				response.json( ).then( function ( data ) {

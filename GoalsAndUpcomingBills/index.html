@@ -67,7 +67,9 @@
                                 </v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-toolbar-items>
-                                    <v-btn flat>
+                                    
+<!--Added on click event for plus sign on goals-->
+                                    <v-btn flat @click="addingNewGoal=true">
                                         <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
                                             <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                         </svg>
@@ -76,16 +78,17 @@
                             </v-toolbar>
                             <v-card-text flat>
                                     <v-list>
-                                        <v-list-tile v-for="item in goals">
+                                        <v-list-tile v-for="(item, index) in goals">
                                             <v-list-tile-content>
                                                 <v-list-tile-title class="headline title">
-                                                    <v-btn flat class="editButton"><v-icon>edit</v-icon>
+<!--                                                    edited on click event-->
+                                                    <v-btn flat class="editButton" @click='editingGoal=true; goalsIndex = index' ><v-icon>edit</v-icon>
                                                     </v-btn>
-                                                    {{item.goal}}</v-list-tile-title>
+                                                    {{editGoal(item.goal)}}</v-list-tile-title>
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
+<!--                                                    deleted v-model-->
                                                     <v-checkbox
-                                                      v-model="ex4"
                                                       label="completed"
                                                       color="success"
                                                       value="completed"
@@ -140,7 +143,8 @@
                 
                         <v-layout>
                                                     <div>
-    <v-card>
+<!--    added condition for form-->
+    <v-card v-if="addingNewGoal==true">
                                         <v-card-title>
                                           <span class="headline">Enter a New Goal</span>
                                         </v-card-title>
@@ -151,7 +155,9 @@
                                                 <v-text-field label="Goal Name*" required></v-text-field>
                                               </v-flex>
                                               <v-flex xs12>
-                                                <v-text-area label="Description"></v-text-area>
+<!--                                      added info to text area-->
+                                                <v-textarea label="Description"
+                                                name='description'></v-textarea>
                                               </v-flex>
                                               <v-flex xs12>
                                                 <v-checkbox
@@ -184,22 +190,76 @@
                                                       required
                                                     ></v-select>
                                                   </v-flex>
-<!--
-                                              <v-flex xs12 sm6>
-                                                <v-select
-                                                  :items="['0-17', '18-29', '30-54', '54+']"
-                                                  label="Age*"
-                                                  required
-                                                ></v-select>
-                                              </v-flex>
--->
                                             </v-layout>
                                           </v-container>
                                           <small>*indicates required field</small>
                                         </v-card-text>
                                         <v-card-actions>
                                           <v-spacer></v-spacer>
-                                          <v-btn color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
+<!--                                            added condition on close for add new goal form -->
+                                          <v-btn @click="addingNewGoal=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
+                                          <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                                        </div>
+<!--                            added form for editing goal-->
+                            <div>
+    <v-card v-if="editingGoal==true">
+                                        <v-card-title>
+                                          <span class="headline">Edit Goal</span>
+                                        </v-card-title>
+                                        <v-card-text>
+                                          <v-container grid-list-md>
+                                            <v-layout wrap>
+                                              <v-flex xs12>
+                                                <v-text-field label="Goal Name*" required
+                                                v-model="goals[goalsIndex].goal"></v-text-field>
+                                              </v-flex>
+                                              <v-flex xs12>
+                                                <v-textarea 
+                                                label="Description"
+                                                name="description"
+                                                v-model="goals[goalsIndex].description"></v-textarea>
+                                              </v-flex>
+                                              <v-flex xs12>
+                                                <v-checkbox
+                                                      label="Change the dealine?"
+                                                      color="deep-purple lighten-1"
+                                                      value="isdeadline"
+                                                      hide-details
+                                                      v-model="isDeadline"
+    
+                                                ></v-checkbox>
+                                              </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="isDeadline">
+                                                    <v-select
+                                                      :items="month"
+                                                      label="Month*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="isDeadline">
+                                                    <v-select
+                                                      :items="day"
+                                                      label="Day*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="isDeadline">
+                                                    <v-select
+                                                      :items="year"
+                                                      label="Year*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                            </v-layout>
+                                          </v-container>
+                                          <small>*indicates required field</small>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                          <v-spacer></v-spacer>
+<!--                                            added condition on close for add new goal form -->
+                                          <v-btn @click="editingGoal=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
                                           <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
                                         </v-card-actions>
                                       </v-card>
