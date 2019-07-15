@@ -23,6 +23,7 @@
                     </v-toolbar-items>
                 </v-toolbar>
                 <!-- Start of pages -->
+                
                 <v-container fluid>
                     <v-layout v-if="page == 'sign_up'" mt-3>
                         <v-flex xs2 text-xs-center></v-flex>
@@ -57,6 +58,7 @@
                         <v-flex xs2 text-xs-center></v-flex>
                     </v-layout>
                     
+<!--                    Goals   -->
                     
                     <v-container fluid v-if="page == 'home'">
                     <v-layout>
@@ -67,8 +69,7 @@
                                 </v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-toolbar-items>
-                                    
-<!--Added on click event for plus sign on goals-->
+
                                     <v-btn flat @click="addingNewGoal=true">
                                         <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
                                             <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
@@ -81,14 +82,13 @@
                                         <v-list-tile v-for="(item, index) in goals">
                                             <v-list-tile-content>
                                                 <v-list-tile-title class="headline title">
-<!--                                                    edited on click event-->
+
                                                     <v-btn flat class="editButton" @click='editingGoal=true; goalsIndex = index' ><v-icon>edit</v-icon>
                                                     </v-btn>
                                                     {{editGoal(item.goal)}}</v-list-tile-title>
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
-<!--                                                    deleted v-model-->
-                                                    <v-checkbox
+                                     <v-checkbox
                                                       label="completed"
                                                       color="success"
                                                       value="completed"
@@ -99,6 +99,11 @@
                                     </v-list>
                             </v-card-text> 
                         </v-card>
+<!--
+                        
+                        Upcoming Payments 
+-->
+                        
                         <v-card width="500" class="mx-auto" color="deep-purple lighten-4">
                             <v-toolbar dark color="deep-purple lighten-2 font-weight-bold">
                                 <v-toolbar-title>
@@ -142,9 +147,11 @@
                         <!--    New Goal Form -->
                 
                         <v-layout>
-                                                    <div>
-<!--    added condition for form-->
-    <v-card v-if="addingNewGoal==true">
+                            <div>
+<!--                                added v-dialog and edited v-card conditions-->
+                                <v-dialog v-model="addingNewGoal">
+
+                                    <v-card>
                                         <v-card-title>
                                           <span class="headline">Enter a New Goal</span>
                                         </v-card-title>
@@ -155,7 +162,7 @@
                                                 <v-text-field label="Goal Name*" required></v-text-field>
                                               </v-flex>
                                               <v-flex xs12>
-<!--                                      added info to text area-->
+
                                                 <v-textarea label="Description"
                                                 name='description'></v-textarea>
                                               </v-flex>
@@ -196,15 +203,17 @@
                                         </v-card-text>
                                         <v-card-actions>
                                           <v-spacer></v-spacer>
-<!--                                            added condition on close for add new goal form -->
                                           <v-btn @click="addingNewGoal=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
                                           <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
                                         </v-card-actions>
                                       </v-card>
-                                                        </div>
-<!--                            added form for editing goal-->
+                                    </v-dialog>
+                                </div>
+<!--                            Editing Goal Form-->
+                            
                             <div>
-    <v-card v-if="editingGoal==true">
+                                <v-dialog v-model="editingGoal">
+    q                           <v-card>
                                         <v-card-title>
                                           <span class="headline">Edit Goal</span>
                                         </v-card-title>
@@ -258,12 +267,12 @@
                                         </v-card-text>
                                         <v-card-actions>
                                           <v-spacer></v-spacer>
-<!--                                            added condition on close for add new goal form -->
                                           <v-btn @click="editingGoal=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
                                           <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
                                         </v-card-actions>
                                       </v-card>
-                                                        </div>
+                                </v-dialog>
+                                </div>
                             </v-layout>
                     </v-container>
                 </v-container>
