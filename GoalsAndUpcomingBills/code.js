@@ -19,12 +19,13 @@ var app = new Vue ({
                 isdeadline:false,
             },
         ],
-//        added data for new goal
         addingNewGoal: false,
-        //        added data for editing goal
         editingGoal:false,
-        //        added data for editing goal
-        goalsIndex: 0,
+//changed data name
+        itemIndex: 0,
+// added data for upcoming payments
+        addingUpcomingPayment: false,
+        editingPayments: false,
         bills: [
             {
                 billName:'rent',
@@ -42,6 +43,8 @@ var app = new Vue ({
             },
         ],
         isDeadline: false,
+// added data member
+        changeDueDate: false,
         month: [
             "01","02","03","04","05","06","07","08","09","10","11","12",
         ],
@@ -53,13 +56,21 @@ var app = new Vue ({
         ],
     },
     methods: {
-//        created edit goal function
-        editGoal: function(goalName) {
+//        edited method name
+        keepGoalIndex: function(goalName) {
             for (var i = 0; i < this.goals.length; i++) {
             } if (goalName==this.goals[i]) {
-                this.goalsIndex=i;
+                this.itemIndex=i;
             }
             return goalName;
+        },
+//        added method
+        keepPaymentIndex: function(billName) {
+            for (var i = 0; i < this.bills.length; i++) {
+            } if (billName==this.bills[i]) {
+                this.itemIndex=i;
+            }
+            return billName;
         },
         getGoals: function ( ) {
 			fetch( `${ url }/goals` ).then( function ( response ) {

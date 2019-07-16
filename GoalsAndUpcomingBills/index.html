@@ -82,10 +82,11 @@
                                         <v-list-tile v-for="(item, index) in goals">
                                             <v-list-tile-content>
                                                 <v-list-tile-title class="headline title">
-
-                                                    <v-btn flat class="editButton" @click='editingGoal=true; goalsIndex = index' ><v-icon>edit</v-icon>
+<!--edited index name-->
+                                                    <v-btn flat class="editButton" @click='editingGoal=true; itemIndex = index' ><v-icon>edit</v-icon>
                                                     </v-btn>
-                                                    {{editGoal(item.goal)}}</v-list-tile-title>
+<!--changed method name-->
+                                                    {{keepGoalIndex(item.goal)}}</v-list-tile-title>
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
                                      <v-checkbox
@@ -111,7 +112,8 @@
                                 </v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-toolbar-items>
-                                    <v-btn flat>
+<!--                                    added on click action-->
+                                    <v-btn @click='addingUpcomingPayment=true' flat>
                                         <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
                                             <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                         </svg>
@@ -120,12 +122,14 @@
                             </v-toolbar>
                             <v-card-text flat>
                                     <v-list two-line>
-                                        <v-list-tile v-for="bill in bills">
+<!--                    Added editing functionability-->
+                                        <v-list-tile v-for="(item, index) in bills">
                                             <v-list-tile-content>
+
                                                 <v-list-tile-title class="headline title">
-                                                    <v-btn flat class="editButton">
+                                                    <v-btn flat class="editButton"@click='editingPayments=true; itemIndex = index'>
                                                     <v-icon class="editIcon">edit</v-icon>
-                                                    </v-btn> {{bill.billName}}</v-list-tile-title>  
+                                                    </v-btn> {{keepPaymentIndex(item.billName)}}</v-list-tile-title>  
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
                                                     <v-checkbox
@@ -135,7 +139,7 @@
                                                       hide-details
                                                     ></v-checkbox>
                                                     <div>
-                                                        Due: {{bill.dueDate}} Amount: {{bill.amount}}
+                                                        Due: {{item.dueDate}} Amount: {{item.amount}}
                                                     </div>
                                                 </v-list-tile-action>
                                         </v-list-tile> 
@@ -148,7 +152,6 @@
                 
                         <v-layout>
                             <div>
-<!--                                added v-dialog and edited v-card conditions-->
                                 <v-dialog v-model="addingNewGoal">
 
                                     <v-card>
@@ -209,11 +212,12 @@
                                       </v-card>
                                     </v-dialog>
                                 </div>
+                        </v-layout>
 <!--                            Editing Goal Form-->
                             
                             <div>
                                 <v-dialog v-model="editingGoal">
-    q                           <v-card>
+                                    <v-card>
                                         <v-card-title>
                                           <span class="headline">Edit Goal</span>
                                         </v-card-title>
@@ -221,14 +225,15 @@
                                           <v-container grid-list-md>
                                             <v-layout wrap>
                                               <v-flex xs12>
+<!--                                   edited index method name-->
                                                 <v-text-field label="Goal Name*" required
-                                                v-model="goals[goalsIndex].goal"></v-text-field>
+                                                v-model="goals[itemIndex].goal"></v-text-field>
                                               </v-flex>
                                               <v-flex xs12>
                                                 <v-textarea 
                                                 label="Description"
                                                 name="description"
-                                                v-model="goals[goalsIndex].description"></v-textarea>
+                                                v-model="goals[itemIndex].description"></v-textarea>
                                               </v-flex>
                                               <v-flex xs12>
                                                 <v-checkbox
@@ -268,6 +273,124 @@
                                         <v-card-actions>
                                           <v-spacer></v-spacer>
                                           <v-btn @click="editingGoal=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
+                                          <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                </v-dialog>
+                                </div>
+             <!--    New Upcoming Payment Form -->
+                
+                        <v-layout>
+                            <div>
+                                <v-dialog v-model="addingUpcomingPayment" max-width='600px'>
+
+                                    <v-card>
+                                        <v-card-title>
+                                          <span class="headline">Enter a New Upcoming Payment</span>
+                                        </v-card-title>
+                                        <v-card-text>
+                                          <v-container grid-list-md>
+                                            <v-layout wrap>
+                                              <v-flex xs12>
+                                                <v-text-field label="Payment Name*" required></v-text-field>
+                                              </v-flex>
+                                              <v-flex xs12>
+
+                                                <v-textarea label="Description"
+                                                name='description'></v-textarea>
+                                              </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-select
+                                                      :items="month"
+                                                      label="Month*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-select
+                                                      :items="day"
+                                                      label="Day*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-select
+                                                      :items="year"
+                                                      label="Year*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                            </v-layout>
+                                          </v-container>
+                                          <small>*indicates required field</small>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                          <v-spacer></v-spacer>
+                                          <v-btn @click="addingUpcomingPayment=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
+                                          <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                    </v-dialog>
+                                </div>
+<!--                            Editing Payments Form-->
+                            
+                            <div>
+                                <v-dialog v-model="editingPayments">
+                                    <v-card>
+                                        <v-card-title>
+                                          <span class="headline">Edit Payment</span>
+                                        </v-card-title>
+                                        <v-card-text>
+                                          <v-container grid-list-md>
+                                            <v-layout wrap>
+                                              <v-flex xs12>
+                                                <v-text-field label="Payment Name*" required
+                                                v-model="bills[itemIndex].billName"></v-text-field>
+                                              </v-flex>
+                                              <v-flex xs12>
+                                                <v-textarea 
+                                                label="Description"
+                                                name="description"
+                                                v-model="bills[itemIndex].description"></v-textarea>
+                                              </v-flex>
+                                              <v-flex xs12>
+                                                <v-checkbox
+                                                      label="Change the due date?"
+                                                      color="deep-purple lighten-1"
+                                                      value="changeduedate"
+                                                      hide-details
+                                                      v-model="changeDueDate"
+    
+                                                ></v-checkbox>
+                                              </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="changeDueDate">
+                                                    <v-select
+                                                      :items="month"
+                                                      label="Month*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="changeDueDate">
+                                                    <v-select
+                                                      :items="day"
+                                                      label="Day*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                                <v-flex xs12 sm6 md4 v-if="changeDueDate">
+                                                    <v-select
+                                                      :items="year"
+                                                      label="Year*"
+                                                      required
+                                                    ></v-select>
+                                                  </v-flex>
+                                            </v-layout>
+                                          </v-container>
+                                          <small>*indicates required field</small>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                          <v-spacer></v-spacer>
+                                          <v-btn @click="editingPayments=false" color="deep-purple lighten-1" flat @click="dialog = false">Close</v-btn>
                                           <v-btn color="deep-purple lighten-1" flat>Save</v-btn>
                                         </v-card-actions>
                                       </v-card>
