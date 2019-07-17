@@ -21,9 +21,7 @@ var app = new Vue ({
         ],
         addingNewGoal: false,
         editingGoal:false,
-//changed data name
         itemIndex: 0,
-// added data for upcoming payments
         addingUpcomingPayment: false,
         editingPayments: false,
         bills: [
@@ -43,7 +41,6 @@ var app = new Vue ({
             },
         ],
         isDeadline: false,
-// added data member
         changeDueDate: false,
         month: [
             "01","02","03","04","05","06","07","08","09","10","11","12",
@@ -56,15 +53,15 @@ var app = new Vue ({
         ],
     },
     methods: {
-//        edited method name
         keepGoalIndex: function(goalName) {
-            for (var i = 0; i < this.goals.length; i++) {
-            } if (goalName==this.goals[i]) {
-                this.itemIndex=i;
+            if (this.goals.length >=1) {
+                for (var i = 0; i < this.goals.length; i++) {
+                } if (goalName==this.goals[i]) {
+                    this.itemIndex=i;
+                }
+                return goalName;
             }
-            return goalName;
         },
-//        added method
         keepPaymentIndex: function(billName) {
             for (var i = 0; i < this.bills.length; i++) {
             } if (billName==this.bills[i]) {
@@ -72,129 +69,158 @@ var app = new Vue ({
             }
             return billName;
         },
-        getGoals: function ( ) {
-			fetch( `${ url }/goals` ).then( function ( response ) {
-				response.json( ).then( function ( data ) {
-					app.goals = data.goals;
-				});
-			});
-		},
-        addNewGoal: function ( ) {
-			var req_body = {
-				name: this.new_goal_input
-			};
-			fetch( `${ url }/goals`, {
-				method: "POST",
-				headers: {
-					"Content-type": "application/json"
-				},
-				body: JSON.stringify( req_body )
-			}).then( function ( response ) {
-				if ( response.status == 400 ) {
-					response.json( ).then( function ( data ) {
-						alert( data.msg );
-					});
-				} else if ( response.status == 201 ) {
-					app.new_goal_input = "";
-					app.getGoals( );
-				}
-			});
+//        added methods
+         getGoal: function(i) {
+            if (this.goals.length >=1) {
+                return this.goals[i].goal;
+            } else {
+                return '';
+            }
         },
-        deleteGoal: function ( goal ) {
-			fetch( `${ url }/goals/${ goal.id }`, {
-				method: "DELETE"
-			}).then( function ( response ) {
-				if ( response.status == 404 ) {
-					response.json( ).then( function ( data ) {
-						alert( data.msg );
-					});
-				} else if ( response.status == 204 ) {
-					app.getGoals( );
-				}
-			});
+        getGoalDescription: function(i) {
+            if (this.goals.length >=1) {
+                return this.goals[i].description;
+            } else {
+                return '';
+            }
         },
-		saveGoalEdit: function ( goal ) {
-			var req_body = {
-				name: goal.name
-			};
-			fetch( `${ url }/goals/${ goal.id }`, {
-				method: "PUT",
-				headers: {
-					"Content-type": "application/json"
-				},
-				body: JSON.stringify( req_body )
-			}).then( function ( response ) {
-				if ( response.status == 400 || response.status == 404 ) {
-					response.json( ).then( function ( data ) {
-						alert( data.msg );
-					});
-				} else if ( response.status == 204 ) {
-					goal.editing = false;
-					app.getGoals( );
-				}
-			});
-		},
-        getBills: function ( ) {
-			fetch( `${ url }/bills` ).then( function ( response ) {
-				response.json( ).then( function ( data ) {
-					app.bills = data.bills;
-				});
-			});
-		},
-        addNewBill: function ( ) {
-			var req_body = {
-				name: this.new_bill_input
-			};
-			fetch( `${ url }/bills`, {
-				method: "POST",
-				headers: {
-					"Content-type": "application/json"
-				},
-				body: JSON.stringify( req_body )
-			}).then( function ( response ) {
-				if ( response.status == 400 ) {
-					response.json( ).then( function ( data ) {
-						alert( data.msg );
-					});
-				} else if ( response.status == 201 ) {
-					app.new_bill_input = "";
-					app.getBills( );
-				}
-			});
+        completedGoal: function(goalIndex) {
+            if (this.goals.length >=1) {
+                this.goals.splice(goalIndex, 1);
+                console.log(goalIndex);
+                console.log(this.goals.length);
+            } else {
+                this.goals=[];
+            }
+            
         },
-        deleteBill: function ( bill ) {
-			fetch( `${ url }/bills/${ bill.id }`, {
-				method: "DELETE"
-			}).then( function ( response ) {
-				if ( response.status == 404 ) {
-					response.json( ).then( function ( data ) {
-						alert( data.msg );
-					});
-				} else if ( response.status == 204 ) {
-					app.getBills( );
-				}
-			});
-        },
-		saveBillEdit: function ( bill ) {
-			var req_body = {
-				name: bill.name
-			};
-			fetch( `${ url }/bills/${ bill.id }`, {
-				method: "PUT",
-				headers: {
-					"Content-type": "application/json"
-				},
-				body: JSON.stringify( req_body )
-			}).then( function ( response ) {
-				if ( response.status == 400 || response.status == 404 ) {
-					response.json( ).then( function ( data ) {
-						alert( data.msg );
-					});
-				} else if ( response.status == 204 ) {
-					bill.editing = false;
-					app.getBills( );
-				}
-			});
-		},
+       
+//        getGoals: function ( ) {
+//			fetch( `${ url }/goals` ).then( function ( response ) {
+//				response.json( ).then( function ( data ) {
+//					app.goals = data.goals;
+//				});
+//			});
+//		},
+//        addNewGoal: function ( ) {
+//			var req_body = {
+//				name: this.new_goal_input
+//			};
+//			fetch( `${ url }/goals`, {
+//				method: "POST",
+//				headers: {
+//					"Content-type": "application/json"
+//				},
+//				body: JSON.stringify( req_body )
+//			}).then( function ( response ) {
+//				if ( response.status == 400 ) {
+//					response.json( ).then( function ( data ) {
+//						alert( data.msg );
+//					});
+//				} else if ( response.status == 201 ) {
+//					app.new_goal_input = "";
+//					app.getGoals( );
+//				}
+//			});
+//        },
+//        deleteGoal: function ( goal ) {
+//			fetch( `${ url }/goals/${ goal.id }`, {
+//				method: "DELETE"
+//			}).then( function ( response ) {
+//				if ( response.status == 404 ) {
+//					response.json( ).then( function ( data ) {
+//						alert( data.msg );
+//					});
+//				} else if ( response.status == 204 ) {
+//					app.getGoals( );
+//				}
+//			});
+//        },
+//		saveGoalEdit: function ( goal ) {
+//			var req_body = {
+//				name: goal.name
+//			};
+//			fetch( `${ url }/goals/${ goal.id }`, {
+//				method: "PUT",
+//				headers: {
+//					"Content-type": "application/json"
+//				},
+//				body: JSON.stringify( req_body )
+//			}).then( function ( response ) {
+//				if ( response.status == 400 || response.status == 404 ) {
+//					response.json( ).then( function ( data ) {
+//						alert( data.msg );
+//					});
+//				} else if ( response.status == 204 ) {
+//					goal.editing = false;
+//					app.getGoals( );
+//				}
+//			});
+//		},
+//        getBills: function ( ) {
+//			fetch( `${ url }/bills` ).then( function ( response ) {
+//				response.json( ).then( function ( data ) {
+//					app.bills = data.bills;
+//				});
+//			});
+//		},
+//        addNewBill: function ( ) {
+//			var req_body = {
+//				name: this.new_bill_input
+//			};
+//			fetch( `${ url }/bills`, {
+//				method: "POST",
+//				headers: {
+//					"Content-type": "application/json"
+//				},
+//				body: JSON.stringify( req_body )
+//			}).then( function ( response ) {
+//				if ( response.status == 400 ) {
+//					response.json( ).then( function ( data ) {
+//						alert( data.msg );
+//					});
+//				} else if ( response.status == 201 ) {
+//					app.new_bill_input = "";
+//					app.getBills( );
+//				}
+//			});
+//        },
+//        deleteBill: function ( bill ) {
+//			fetch( `${ url }/bills/${ bill.id }`, {
+//				method: "DELETE"
+//			}).then( function ( response ) {
+//				if ( response.status == 404 ) {
+//					response.json( ).then( function ( data ) {
+//						alert( data.msg );
+//					});
+//				} else if ( response.status == 204 ) {
+//					app.getBills( );
+//				}
+//			});
+//        },
+//		saveBillEdit: function ( bill ) {
+//			var req_body = {
+//				name: bill.name
+//			};
+//			fetch( `${ url }/bills/${ bill.id }`, {
+//				method: "PUT",
+//				headers: {
+//					"Content-type": "application/json"
+//				},
+//				body: JSON.stringify( req_body )
+//			}).then( function ( response ) {
+//				if ( response.status == 400 || response.status == 404 ) {
+//					response.json( ).then( function ( data ) {
+//						alert( data.msg );
+//					});
+//				} else if ( response.status == 204 ) {
+//					bill.editing = false;
+//					app.getBills( );
+//				}
+//			});
+//		},
     },
 })
+
+
+

@@ -78,23 +78,25 @@
                                 </v-toolbar-items>
                             </v-toolbar>
                             <v-card-text flat>
-                                    <v-list>
+<!--                       changed a lot here lol-->
+                                    <span v-if='goals.length==0'>
+                                            You don't currently have anything to look forward to. Make a new goal to add some purpose to your life!
+                                    </span>
+                                    <v-list v-if="goals.length != 0">
                                         <v-list-tile v-for="(item, index) in goals">
                                             <v-list-tile-content>
                                                 <v-list-tile-title class="headline title">
-<!--edited index name-->
+
                                                     <v-btn flat class="editButton" @click='editingGoal=true; itemIndex = index' ><v-icon>edit</v-icon>
-                                                    </v-btn>
-<!--changed method name-->
-                                                    {{keepGoalIndex(item.goal)}}</v-list-tile-title>
+                                                    </v-btn >
+
+                                                    <span v-if="goals.length != 0" >{{keepGoalIndex(item.goal)}}</span>
+                                                </v-list-tile-title>
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
-                                     <v-checkbox
-                                                      label="completed"
-                                                      color="success"
-                                                      value="completed"
-                                                      hide-details
-                                                    ></v-checkbox>
+                                                    <v-btn @click="completedGoal(index)">
+                                                        <v-icon>check</v-icon>
+                                                    </v-btn>
                                                 </v-list-tile-action>
                                         </v-list-tile> 
                                     </v-list>
@@ -112,7 +114,7 @@
                                 </v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-toolbar-items>
-<!--                                    added on click action-->
+
                                     <v-btn @click='addingUpcomingPayment=true' flat>
                                         <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
                                             <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
@@ -122,14 +124,19 @@
                             </v-toolbar>
                             <v-card-text flat>
                                     <v-list two-line>
-<!--                    Added editing functionability-->
-                                        <v-list-tile v-for="(item, index) in bills">
+                                        <span v-if='bills.length==0'>
+                                                You don't currently have any upcoming payments. Add a payment to track your bills.
+                                        </span>
+
+                                        <v-list-tile v-if="bills.length != 0" v-for="(item, index) in bills">
                                             <v-list-tile-content>
 
                                                 <v-list-tile-title class="headline title">
                                                     <v-btn flat class="editButton"@click='editingPayments=true; itemIndex = index'>
                                                     <v-icon class="editIcon">edit</v-icon>
-                                                    </v-btn> {{keepPaymentIndex(item.billName)}}</v-list-tile-title>  
+                                                    </v-btn> 
+                                                    <span  v-if="goals.length != 0">{{keepPaymentIndex(item.billName)}}</span>
+                                                </v-list-tile-title>  
                                                 </v-list-tile-content>
                                                 <v-list-tile-action>
                                                     <v-checkbox
@@ -225,15 +232,17 @@
                                           <v-container grid-list-md>
                                             <v-layout wrap>
                                               <v-flex xs12>
-<!--                                   edited index method name-->
+                                                  
+<!--                      changed v-models for description and goal name-->
+
                                                 <v-text-field label="Goal Name*" required
-                                                v-model="goals[itemIndex].goal"></v-text-field>
+                                                v-model="getGoal(itemIndex)"></v-text-field>
                                               </v-flex>
                                               <v-flex xs12>
                                                 <v-textarea 
                                                 label="Description"
                                                 name="description"
-                                                v-model="goals[itemIndex].description"></v-textarea>
+                                                v-model="getGoalDescription(itemIndex)"></v-textarea>
                                               </v-flex>
                                               <v-flex xs12>
                                                 <v-checkbox
