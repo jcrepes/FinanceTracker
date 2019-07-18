@@ -6,7 +6,7 @@ getCategories: function() {
                 });
             });
         },
-possible way to organize data:
+//possible way to organize data:
 categories: [
     food, car, rent, fun, shopping,
 
@@ -38,3 +38,37 @@ listCategorySpending: [
     ]
 ]
 // if all of our lists are the same length we can create a functikno that will loop through all of the lists and match the indexes together so that the correct info goes with each category. 
+//added more possible server functions
+getBudgets: function() {
+            fetch(this.server_url+"/budgets").then(function(res) {
+                res.json().then(function(data) {
+                    console.log(data);
+                    app.budgets = data.budgets;
+                });
+            });
+        },
+getTotals: function() {
+            fetch(this.server_url+"/totals").then(function(res) {
+                res.json().then(function(data) {
+                    console.log(data);
+                    app.totals = data.totals;
+                });
+            });
+        },
+getCategorySpending: function() {
+            fetch(this.server_url+"/spending").then(function(res) {
+                res.json().then(function(data) {
+                    console.log(data);
+                    app.spending = data.spending;
+                });
+            });
+        },
+//getCategoryInfo: function() {
+//    for (var i = 0; i < this.categories.length; i++) {
+//            } return [this.categories[i], this.budgets[i], this.totalSpentinCategory[i], this.listCategorySpending[i]];
+//}
+totalSpendinginCategory: function(categoryIndex):
+    var total=0
+    for (var i = 0; i < this.listCategorySpending[categoryIndex].length; i++) {
+        } total+=this.listCategorySpending[categoryIndex][i]
+}  return total
