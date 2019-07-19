@@ -94,6 +94,10 @@ var app = new Vue ({
             }
             
         },
+        // new method
+        total: function() {
+          return (Number(this.savings)+Number(this.checking));
+      }
        
 //        getGoals: function ( ) {
 //			fetch( `${ url }/goals` ).then( function ( response ) {
