@@ -415,3 +415,351 @@
     <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
     <script src="code.js"></script>
     </html>
+
+
+
+
+
+<!--Newest Changes to Goals and Bills-->
+                   
+                  <!--End of make of payment-->
+                  <v-layout pt-4 pb-4>
+                    <v-flex xs12>
+                        <v-card width="825" class="mx-auto" color="deep-purple lighten-4">
+                            <v-toolbar dark color="deep-purple lighten-2 font-weight-bold">
+                                <v-toolbar-title>
+                                    Goals
+                                </v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-toolbar-items>
+                                    <v-btn flat @click="addingNewGoal=true">
+                                        <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
+                                            <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                                        </svg>
+                                    </v-btn>
+                      
+                              </v-toolbar-items>
+                          </v-toolbar>
+                          <v-card-text flat>
+                          <span v-if="goals.length ==0">
+                              You don't currently have anything to look forward to. Make a new goal to add some purpose to your life!
+                          </span>
+                        <v-list v-if="goals.length != 0">
+                          <v-list-tile v-for="(item, index) in goals">
+                              <v-list-tile-content >
+                                  <v-list-tile-title class="headline title">
+                                    <v-btn flat class="editButton" @click='editingGoal=true; goalIndex = index' ><v-icon>edit</v-icon>
+                                    </v-btn >
+
+                                  <span v-if="goals.length != 0" >{{item.goal}}</span>
+                                  </v-list-tile-title>
+                                  </v-list-tile-content>
+                                  <v-list-tile-action>
+                                      <v-btn flat @click="completedGoal(index)">
+                                          <v-icon>check</v-icon>
+                                      </v-btn>
+                                  </v-list-tile-action>
+                          </v-list-tile> 
+                      </v-list>
+              </v-card-text> 
+          </v-card>
+                    </v-flex>
+                  </v-layout>
+                    <v-flex>
+                        <v-card width="825" class="mx-auto" color="deep-purple lighten-4">
+                            <v-toolbar dark color="deep-purple lighten-2 font-weight-bold">
+                                <v-toolbar-title>
+                                    Upcoming Bills
+                                </v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-toolbar-items>
+                                    <v-btn  @click='addingUpcomingPayment=true' flat>
+                                        <svg dark style="width:24px;height:24px" viewBox="0 0 24 24">
+                                            <path fill="#ffffff" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                                        </svg>
+                                    </v-btn>
+                                </v-toolbar-items>
+                            </v-toolbar>
+                            <v-card-text flat>
+                                  <span v-if='bills.length==0'>
+                                     You don't currently have any upcoming payments. Add a payment to track your bills.
+                                  </span>
+                                    <v-list v-else two-line>
+                                        <v-list-tile v-for="(item, index) in bills">
+                                            <v-list-tile-content>
+                                                <v-list-tile-title class="headline title">
+                                                    <v-btn flat class="editButton" @click='editingPayments=true; billsIndex = index'>
+                                                    <v-icon class="editIcon" >edit</v-icon>
+                                                    </v-btn>
+                                                    <span v-if="bills.length !=0">{{item.billName}}</span>
+                                                  </v-list-tile-title>  
+                                                </v-list-tile-content>
+                                                <v-list-tile-action>
+                                                    <v-btn flat bold @click="completedBill(index)">
+                                                        <v-icon>check</v-icon>
+                                                    </v-btn>
+                                                    <div>
+                                                        Due: {{item.dueDate}} Amount: {{item.amount}}
+                                                    </div>
+                                                </v-list-tile-action>
+                                        </v-list-tile> 
+                                    </v-list>
+                            </v-card-text>
+                        </v-card>
+                    </v-layout>
+                    <v-layout>
+                        <div>
+                            
+                        <!--added condition for form-->
+            <v-dialog v-model="addingNewGoal"  persistent max-width="600px">
+            <v-card>
+            <v-card-title>
+              <span class="headline">Enter a New Goal</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-text-field v-model="newGoal.goal" label="Goal Name*" required></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                <!--added info to text area-->
+                    <v-textarea v-model="newGoal.description" label="Description" name='description'></v-textarea>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-checkbox
+                          label="Does this goal have a deadline?"
+                          color="deep-purple lighten-1"
+                          value="isdeadline"
+                          hide-details
+                          v-model="newGoal.isDeadline"
+
+                    ></v-checkbox>
+                  </v-flex>
+                    <v-flex xs12 sm6 md4 v-if="newGoal.isDeadline">
+                        <v-select
+                          :items="month"
+                          label="Month*"
+                          required
+                        ></v-select>
+                      </v-flex>
+                    <v-flex xs12 sm6 md4 v-if="newGoal.isDeadline">
+                        <v-select
+                          :items="day"
+                          label="Day*"
+                          required
+                        ></v-select>
+                      </v-flex>
+                    <v-flex xs12 sm6 md4 v-if="newGoal.isDeadline">
+                        <v-select
+                          :items="year"
+                          label="Year*"
+                          required
+                        ></v-select>
+                      </v-flex>
+                </v-layout>
+              </v-container>
+              <small>*indicates required field</small>
+
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn @click="addingNewGoal=false; dialog = false"  color="deep-purple lighten-1" flat>Close</v-btn>
+              <v-btn color="deep-purple lighten-1" flat @click="addingNewGoal=false; dialog = false ; addNewGoalServer()" >Save</v-btn>
+            </v-card-actions>
+          </v-card>
+          </v-dialog>
+          </div>
+  <!--adde form for editing goal-->          
+          <div>
+            <v-dialog v-model="editingGoal"  persistent max-width="600px">
+              <v-card>
+                  <v-card-title>
+                    <span class="headline">Edit Goal</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container grid-list-md>
+                      <v-layout wrap>
+                        <v-flex xs12>
+                          <v-text-field v-if="goals.length != 0" label="Goal Name*" required
+                          v-model="goals[goalIndex].goal"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                          <v-textarea 
+                          v-if="goals.length != 0"
+                          label="Description"
+                          name="description"
+                          v-model="goals[goalIndex].description"></v-textarea>
+                        </v-flex>
+                        <v-flex xs12>
+                          <v-checkbox
+                                label="Change the deadline?"
+                                color="deep-purple lighten-1"
+                                value="isdeadline"
+                                hide-details
+                                v-model="isDeadline"
+
+                          ></v-checkbox>
+                        </v-flex>
+                          <v-flex xs12 sm6 md4 v-if="isDeadline">
+                              <v-select
+                                :items="month"
+                                label="Month*"
+                                required
+                              ></v-select>
+                            </v-flex>
+                          <v-flex xs12 sm6 md4 v-if="isDeadline">
+                              <v-select
+                                :items="day"
+                                label="Day*"
+                                required
+                              ></v-select>
+                            </v-flex>
+                          <v-flex xs12 sm6 md4 v-if="isDeadline">
+                              <v-select
+                                :items="year"
+                                label="Year*"
+                                required
+                              ></v-select>
+                            </v-flex>
+                      </v-layout>
+                    </v-container>
+                    <small>*indicates required field</small>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                      
+                    <v-btn @click="editingGoal=false" color="deep-purple lighten-1" flat>Close</v-btn>
+                    <v-btn @click="editingGoal=false" color="deep-purple lighten-1" flat>Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+                </v-dialog>
+            </div>
+            <v-layout>
+                <div>
+                    <v-dialog v-model="addingUpcomingPayment" persistent max-width="600px">
+
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">Enter a New Upcoming Bill</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container grid-list-md>
+                            <v-layout wrap>
+                              <v-flex xs12>
+                                <v-text-field v-model="newBill.billName" label="Payment Name*" required></v-text-field>
+                              </v-flex>
+                              <v-flex xs12>
+                                  <v-text-field label="Bill Amount*" required
+                                    v-model="newBill.amount"
+                                    type='number'
+                                    v-if="bills.length != 0"
+                                ></v-text-field>
+                                </v-flex>
+                                 <v-flex xs12>
+                                <v-textarea v-model="newBill.description" label="Description"
+                                  name='description'></v-textarea>
+                                </v-flex>
+                                <v-flex xs12 sm6 md4>
+                                  <v-select
+                                    :items="month"
+                                    label="Month*"
+                                    required
+                                  ></v-select>
+                                </v-flex>
+                                <v-flex xs12 sm6 md4>
+                                  <v-select
+                                    :items="day"
+                                    label="Day*"
+                                    required
+                                  ></v-select>
+                                </v-flex>
+                                <v-flex xs12 sm6 md4>
+                                  <v-select
+                                    :items="year"
+                                    label="Year*"
+                                    required
+                                  ></v-select>
+                                </v-flex>
+                                </v-layout>
+                              </v-container>
+                              <small>*indicates required field</small>
+                            </v-card-text>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn @click="addingUpcomingPayment=false ;dialog=false" color="deep-purple lighten-1" flat>Close</v-btn>
+                              <v-btn @click="addNewBillServer(); dialog = false; addingUpcomingPayment=false" color="deep-purple lighten-1" flat>Save</v-btn>
+                            </v-card-actions> 
+                          </v-card>
+                        </v-dialog>
+                    </div>
+                    <div>
+                        <v-dialog v-if="bills.length != 0" v-model="editingPayments" persistent max-width="600px">
+                            <v-card>
+                                <v-card-title>
+                                  <span class="headline">Edit Bill</span>
+                                </v-card-title>
+                                <v-card-text>
+                                  <v-container grid-list-md>
+                                    <v-layout wrap>
+                                      <v-flex xs12>
+                                        <v-text-field label="Bill Name*" required
+                                        v-if="bills.length != 0"
+                                        v-model="bills[billsIndex].billName"></v-text-field>
+                                      </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field label="Bill Amount*" required
+                                        v-if="bills.length != 0"
+                                        v-model="bills[billsIndex].amount"></v-text-field>
+                                      </v-flex>
+                                        <v-textarea 
+                                         v-if="bills.length != 0"
+                                        label="Description"
+                                        name="description"
+                                        v-model="bills[billsIndex].description"></v-textarea>
+                                      </v-flex>
+                                      <v-flex xs12>
+                                        <v-checkbox
+                                              label="Change the due date?"
+                                              color="deep-purple lighten-1"
+                                              value="changeduedate"
+                                              hide-details
+                                              v-model="changeDueDate"
+
+                                        ></v-checkbox>
+                                      </v-flex>
+                                        <v-flex xs12 sm6 md4 v-if="changeDueDate">
+                                            <v-select
+                                              :items="month"
+                                              label="Month*"
+                                              required
+                                            ></v-select>
+                                          </v-flex>
+                                        <v-flex xs12 sm6 md4 v-if="changeDueDate">
+                                            <v-select
+                                              :items="day"
+                                              label="Day*"
+                                              required
+                                            ></v-select>
+                                          </v-flex>
+                                        <v-flex xs12 sm6 md4 v-if="changeDueDate">
+                                            <v-select
+                                              :items="year"
+                                              label="Year*"
+                                              required
+                                            ></v-select>
+                                          </v-flex>
+                                    </v-layout>
+                                  </v-container>
+                                  <small>*indicates required field</small>
+                                </v-card-text>
+                                <v-card-actions>
+                                  <v-spacer></v-spacer>
+                                  <v-btn @click="editingPayments=false; dialog = false" color="deep-purple lighten-1" flat>Close</v-btn>
+                                  <v-btn @click="editingPayments=false" color="deep-purple lighten-1" flat>Save</v-btn>
+                                </v-card-actions>
+                              </v-card>
+                        </v-dialog>
+                        </div>
+                    </v-layout>
+                
