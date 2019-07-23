@@ -63,12 +63,20 @@ getCategorySpending: function() {
                 });
             });
         },
-//getCategoryInfo: function() {
-//    for (var i = 0; i < this.categories.length; i++) {
-//            } return [this.categories[i], this.budgets[i], this.totalSpentinCategory[i], this.listCategorySpending[i]];
-//}
+
 totalSpendinginCategory: function(categoryIndex):
     var total=0
     for (var i = 0; i < this.listCategorySpending[categoryIndex].length; i++) {
         } total+=this.listCategorySpending[categoryIndex][i]
 }  return total
+
+// new format date function
+formatDate: function() {
+          var date= this.newBillYear+'-                     '+this.newBillMonth+'-'+this.newBillDay
+          this.newBill.dueDate=date;
+          this.newBillMonth='Select a Month';
+        this.newBillDay= 'Select a Day';
+        this.newBillYear= 'Select a Year';
+      },
+
+
